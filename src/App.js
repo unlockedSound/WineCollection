@@ -1,24 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
-
+import React from 'react';
+import SlideOver from "./SlideOver";
+import Header from "./Header";
 function App() {
+
+    const [isAddBottleOpen, setIsAddBottleOpen] = React.useState(true);
+    const handleAddBottleClick = () => {
+        console.log("Add Bottle button clicked (app)");
+        setIsAddBottleOpen(true);
+        };
+    const handleCloseSlideOver = () => {
+console.log("Close SlideOver panel");
+        setIsAddBottleOpen(false);
+    };
+
+    console.log("isAddBottleOpen:", isAddBottleOpen);
+
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div className="App">
+          <Header onAddBottleClick={handleAddBottleClick} />
+          <SlideOver isOpen={isAddBottleOpen} onClose={handleCloseSlideOver} />
+      </div>
   );
 }
 
