@@ -21,6 +21,9 @@ function Form() {
     const [submissionStatus, setSubmissionStatus] = useState(null);
 
     const handleSubmit = async () => {
+        if (formData.z === "0" || formData.z === "1") {
+            setFormData({...formData, y: ""}); // Reset to no value if z is 0 or 1        }
+        }
         console.log('Submitting data:', formData);
 
         try {
@@ -57,7 +60,7 @@ function Form() {
             console.error('An error occurred:', error);
             setSubmissionStatus('error');
         }
-    };
+    }
 
     return (
         <div className="bg-gray-50">
@@ -81,27 +84,39 @@ function Form() {
                                                 onChange={handleInputChange}
                                                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                                 {/*note: handling value here in proper CS style such that 0 is the bottom shelf*/}
-                                                <option value="0"> 1 - bottom shelf</option>
+                                                <option value="" disabled hidden>
+                                                    Select a position
+                                                </option>
+                                                <option value="15"> 1 - top shelf</option>
                                                 {Array.from({length: 14}, (_, index) => (
-                                                    <option key={index} value={index + 1}>
+                                                    <option key={index} value={14 - index}>
                                                         {index + 2}
                                                     </option>
                                                 ),)}
-                                                <option value="15"> 16 - top shelf</option>
+                                                <option value="0"> 16 - bottom shelf</option>
                                             </select>
                                         </div>
                                     </label>
                                 </div>
                                 <div className="mt-4">
                                     <label className="block text-sm font-medium text-gray-700">
-                                        Position from left
+                                        Position from left to right
                                         <div className="mt-1">
-                                            <input
-                                                type="text"
+                                            <select
                                                 name="x"
                                                 value={formData.x}
                                                 onChange={handleInputChange}
-                                                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"/>
+                                                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                            >
+                                                <option value="" disabled hidden>
+                                                    Select a position
+                                                </option>
+                                                <option value="0">1 - left most</option>
+                                                <option value="1">2</option>
+                                                <option value="2">3</option>
+                                                <option value="3">4</option>
+                                                <option value="4">5 - right most</option>
+                                            </select>
                                         </div>
                                     </label>
                                 </div>
@@ -111,7 +126,15 @@ function Form() {
                                         {/*0 = front and 1 = back*/}
                                         <div className="mt-1">
                                             <RadioGroup value={formData.y}
-                                                        onChange={value => setFormData({...formData, y: value})}>
+                                                        onChange={(value) => {
+                                                if (formData.z === "0" || formData.z === "1") {
+                                                setFormData({ ...formData, y: "" }); // Reset to no value
+                                            } else {
+                                                setFormData({ ...formData, y: value });
+                                            }
+                                                }}>
+                                               {formData.z !== "0" && formData.z !== "1" && (
+                                                    <>
                                                 <RadioGroup.Option value="0" className="block">
                                                     {({checked}) => (
                                                         <div
@@ -149,6 +172,8 @@ function Form() {
                                                         </div>
                                                     )}
                                                 </RadioGroup.Option>
+                                                    </>
+                                                )}
                                             </RadioGroup>
                                         </div>
                                     </label>

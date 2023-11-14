@@ -1,14 +1,54 @@
 {
   "data": [
     {
-      "x": "",
-      "y": "",
-      "z": "",
+      "x": "0",
+      "y": "0",
+      "z": "15",
+      "vintage": "test",
+      "region": "test",
+      "notes": "test",
+      "producer": "z=15",
+      "id": 1
+    },
+    {
+      "x": "0",
+      "y": "0",
+      "z": "0",
+      "vintage": "a",
+      "region": "b",
+      "notes": "d",
+      "producer": "all zero",
+      "id": 2
+    },
+    {
+      "x": "4",
+      "y": "0",
+      "z": "0",
+      "vintage": "t",
+      "region": "y",
+      "notes": "u",
+      "producer": "4,0,0",
+      "id": 3
+    },
+    {
+      "x": "3",
+      "y": "1",
+      "z": "10",
+      "vintage": "iyjy",
+      "region": "yjyjyjy",
+      "notes": "jyjyjyjyjy",
+      "producer": "3,1,10",
+      "id": 4
+    },
+    {
+      "x": "1",
+      "y": "0",
+      "z": "0",
       "vintage": "",
       "region": "",
       "notes": "",
       "producer": "",
-      "id": 1
+      "id": 5
     },
     {
       "x": "",
@@ -18,7 +58,77 @@
       "region": "",
       "notes": "",
       "producer": "",
-      "id": 2
+      "id": 6
+    },
+    {
+      "x": "1",
+      "y": "0",
+      "z": "0",
+      "vintage": "",
+      "region": "",
+      "notes": "",
+      "producer": "",
+      "id": 7
+    },
+    {
+      "x": "1",
+      "y": "0",
+      "z": "0",
+      "vintage": "",
+      "region": "",
+      "notes": "",
+      "producer": "",
+      "id": 8
+    },
+    {
+      "x": "4",
+      "y": "0",
+      "z": "0",
+      "vintage": "",
+      "region": "",
+      "notes": "",
+      "producer": "testing clear feature",
+      "id": 9
+    },
+    {
+      "x": "0",
+      "y": "",
+      "z": "0",
+      "vintage": "",
+      "region": "",
+      "notes": "",
+      "producer": "00(null)",
+      "id": 10
+    },
+    {
+      "x": "0",
+      "y": "0",
+      "z": "0",
+      "vintage": "",
+      "region": "",
+      "notes": "",
+      "producer": "0,null,0",
+      "id": 11
+    },
+    {
+      "x": "0",
+      "y": "0",
+      "z": "0",
+      "vintage": "",
+      "region": "",
+      "notes": "",
+      "producer": "0null0 please?",
+      "id": 12
+    },
+    {
+      "x": "4",
+      "y": "0",
+      "z": "0",
+      "vintage": "",
+      "region": "",
+      "notes": "",
+      "producer": "0 null 5",
+      "id": 13
     }
   ]
 }
