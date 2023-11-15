@@ -1,10 +1,6 @@
 import React from 'react';
 
 function Header({ onAddBottleClick }) {
-    const handleAddBottleClick = () => {
-        console.log("Header: Add Bottle button clicked");
-        onAddBottleClick();
-    }
 
     return (
         <header className="bg-indigo-600 py-2">

@@ -7,12 +7,26 @@ function Form() {
     const [formData, setFormData] = useState({
         x: '',
         y: '',
-        z: '',
+        varietal: '',
         vintage: '',
         region: '',
         notes: '',
         producer: ''
     });
+    let [orientation, setOrientation] = useState('');
+    const [shelf, setShelf] = useState('');
+    const calculateY = () => {
+        if (shelf === "15") {
+            return 30;
+        } else if (shelf === "16") {
+            return 31;
+        } else if (orientation === "front") {
+            return shelf * 2;
+        } else {
+            return shelf * 2 + 1;
+        }
+    };
+
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
@@ -21,10 +35,19 @@ function Form() {
     const [submissionStatus, setSubmissionStatus] = useState(null);
 
     const handleSubmit = async () => {
-        if (formData.z === "0" || formData.z === "1") {
-            setFormData({...formData, y: ""}); // Reset to no value if z is 0 or 1        }
-        }
-        console.log('Submitting data:', formData);
+
+        const calculatedY = calculateY();
+
+        const {uniqueId, ...formDataWithoutId} = formData; // Remove the uniqueId field from formData
+
+        const newData = {
+            ...formDataWithoutId,
+            y: calculatedY,
+        };
+
+        console.log('Submitting data:', newData);
+        console.log('orientation:', orientation);
+        console.log('shelf:', shelf);
 
         try {
             const response = await fetch('http://localhost:3001/data', {
@@ -32,7 +55,7 @@ function Form() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(newData), // Send newData instead of formData
             });
 
             console.log('Response:', response);
@@ -43,7 +66,7 @@ function Form() {
                 setFormData({
                     x: '',
                     y: '',
-                    z: '',
+                    varietal: '',
                     vintage: '',
                     region: '',
                     notes: '',
@@ -79,21 +102,28 @@ function Form() {
                                         Shelf number
                                         <div className="mt-1">
                                             <select
-                                                name="z"
-                                                value={formData.z}
-                                                onChange={handleInputChange}
-                                                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                name="shelf"
+                                                value={shelf}
+                                                onChange={(e) => {
+                                                    setShelf(e.target.value);
+                                                    // Clear orientation when shelf is 15 or 16
+                                                    if (e.target.value === "15" || e.target.value === "16") {
+                                                        setOrientation("");
+                                                    }
+                                                }}
+                                                className="block w-full rounded-md border-gray-300 shadow-sm
+                                            focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                                 {/*note: handling value here in proper CS style such that 0 is the bottom shelf*/}
                                                 <option value="" disabled hidden>
-                                                    Select a position
+                                                    Select a shelf
                                                 </option>
-                                                <option value="15"> 1 - top shelf</option>
+                                                <option value={1}> 1 - top shelf</option>
                                                 {Array.from({length: 14}, (_, index) => (
-                                                    <option key={index} value={14 - index}>
+                                                    <option key={index} value={index + 2}>
                                                         {index + 2}
                                                     </option>
                                                 ),)}
-                                                <option value="0"> 16 - bottom shelf</option>
+                                                <option value={16}> 16 - bottom shelf</option>
                                             </select>
                                         </div>
                                     </label>
@@ -111,77 +141,94 @@ function Form() {
                                                 <option value="" disabled hidden>
                                                     Select a position
                                                 </option>
-                                                <option value="0">1 - left most</option>
-                                                <option value="1">2</option>
-                                                <option value="2">3</option>
-                                                <option value="3">4</option>
-                                                <option value="4">5 - right most</option>
+                                                <option value={2}>1 - left most</option>
+                                                <option value={3}>2</option>
+                                                <option value={4}>3</option>
+                                                <option value={5}>4</option>
+                                                <option value={6}>5 - right most</option>
                                             </select>
                                         </div>
                                     </label>
                                 </div>
                                 <div className="mt-4">
-                                    <label className="block text-sm font-medium text-gray-700">
-                                        Front or back
-                                        {/*0 = front and 1 = back*/}
-                                        <div className="mt-1">
-                                            <RadioGroup value={formData.y}
-                                                        onChange={(value) => {
-                                                if (formData.z === "0" || formData.z === "1") {
-                                                setFormData({ ...formData, y: "" }); // Reset to no value
-                                            } else {
-                                                setFormData({ ...formData, y: value });
-                                            }
-                                                }}>
-                                               {formData.z !== "0" && formData.z !== "1" && (
+                                    {shelf !== "15" && shelf !== "16" && (
+                                        <label className="block text-sm font-medium text-gray-700">
+                                            Front or back
+                                            {/*0 = front and 1 = back*/}
+                                            <div className="mt-1">
+                                                <RadioGroup
+                                                    value={orientation}
+                                                    onChange={(value) => {
+                                                        setOrientation(value);
+                                                    }}
+                                                >
                                                     <>
-                                                <RadioGroup.Option value="0" className="block">
-                                                    {({checked}) => (
-                                                        <div
-                                                            className={classNames(
-                                                                'relative rounded-md p-2 cursor-pointer',
-                                                                checked ? 'bg-indigo-100' : 'bg-white'
+                                                        <RadioGroup.Option value="front" className="block">
+                                                            {({checked}) => (
+                                                                <div
+                                                                    className={classNames(
+                                                                        'relative rounded-md p-2 cursor-pointer',
+                                                                        checked ? 'bg-indigo-100' : 'bg-white'
+                                                                    )}
+                                                                >
+                                                                    <div className="flex items-center">
+                                                                        <div className="text-sm">
+                                                                            <RadioGroup.Label
+                                                                                as="span"
+                                                                                className="font-medium text-gray-900"
+                                                                            >
+                                                                                Front
+                                                                            </RadioGroup.Label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             )}
-                                                        >
-                                                            <div className="flex items-center">
-                                                                <div className="text-sm">
-                                                                    <RadioGroup.Label as="span"
-                                                                                      className="font-medium text-gray-900">
-                                                                        Front
-                                                                    </RadioGroup.Label>
+                                                        </RadioGroup.Option>
+                                                        <RadioGroup.Option value="back" className="mt-2 block">
+                                                            {({checked}) => (
+                                                                <div
+                                                                    className={classNames(
+                                                                        'relative rounded-md p-2 cursor-pointer',
+                                                                        checked ? 'bg-indigo-100' : 'bg-white'
+                                                                    )}
+                                                                >
+                                                                    <div className="flex items-center">
+                                                                        <div className="text-sm">
+                                                                            <RadioGroup.Label
+                                                                                as="span"
+                                                                                className="font-medium text-gray-900"
+                                                                            >
+                                                                                Back
+                                                                            </RadioGroup.Label>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                </RadioGroup.Option>
-                                                <RadioGroup.Option value="1" className="mt-2 block">
-                                                    {({checked}) => (
-                                                        <div className={classNames(
-                                                            'relative rounded-md p-2 cursor-pointer',
-                                                            checked ? 'bg-indigo-100' : 'bg-white'
-                                                        )}
-                                                        >
-                                                            <div className="flex items-center">
-                                                                <div className="text-sm">
-                                                                    <RadioGroup.Label as="span"
-                                                                                      className="font-medium text-gray-900">
-                                                                        Back
-                                                                    </RadioGroup.Label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                </RadioGroup.Option>
+                                                            )}
+                                                        </RadioGroup.Option>
                                                     </>
-                                                )}
-                                            </RadioGroup>
-                                        </div>
-                                    </label>
+                                                </RadioGroup>
+                                            </div>
+                                        </label>
+                                    )}
                                 </div>
                             </div>
                             <div className="mt-5 border-t border-gray-200 pt-5">
                                 <h2 className="text-lg font-medium text-gray-900">Bottle details</h2>
                                 <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700">
+                                            Name
+                                            <div className="mt-1">
+                                                <input
+                                                    type="text"
+                                                    name="name"
+                                                    value={formData.name}
+                                                    onChange={handleInputChange}
+                                                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                                />
+                                            </div>
+                                        </label>
+                                    </div>
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700">
                                             Vintage
@@ -253,7 +300,8 @@ function Form() {
                 </div>
             </div>
         </div>
-    );
+    )
+        ;
 
 }
 

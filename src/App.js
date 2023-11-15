@@ -2,11 +2,10 @@ import React from 'react';
 import SlideOver from "./SlideOver";
 import Header from "./Header";
 import TableComponent from "./TableComponent";
-import Form from "./Form";
 
 function App() {
 
-    const [isAddBottleOpen, setIsAddBottleOpen] = React.useState(true);
+    const [isAddBottleOpen, setIsAddBottleOpen] = React.useState(false);
     const handleAddBottleClick = () => {
         console.log("Add Bottle button clicked (app)");
         setIsAddBottleOpen(true);
@@ -24,7 +23,6 @@ function App() {
             <Header onAddBottleClick={handleAddBottleClick}/>
             <TableComponent/>
             <SlideOver isOpen={isAddBottleOpen} onClose={handleCloseSlideOver}/>
-            <Form/>
         </div>
     );
 }
